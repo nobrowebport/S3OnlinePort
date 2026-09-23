@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us">
   <head>
-    <base href="https://nobrowebport.github.io/S3OnlinePort/">
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Slendytubbies 3 WebGL</title>
@@ -67,14 +66,15 @@
 
       var canvas = document.querySelector("#unity-canvas");
       var loadingText = document.querySelector("#loading-text");
+      var GITHUB_PAGES_BASE = "https://nobrowebport.github.io/S3OnlinePort/";
 
       var script = document.createElement("script");
-      script.src = "S3WebGL.loader.js";
+      script.src = GITHUB_PAGES_BASE + "S3WebGL.loader.js";
       script.onload = () => {
         var config = {
           dataUrl: "https://media.githubusercontent.com/media/nobrowebport/S3OnlinePort/main/S3WebGL.data",
-          frameworkUrl: "S3WebGL.framework.js",
-          codeUrl: "S3WebGL.wasm",
+          frameworkUrl: GITHUB_PAGES_BASE + "S3WebGL.framework.js",
+          codeUrl: GITHUB_PAGES_BASE + "S3WebGL.wasm",
           streamingAssetsUrl: "StreamingAssets",
           companyName: "DefaultCompany",
           productName: "S3WebGL",
