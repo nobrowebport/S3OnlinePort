@@ -8,10 +8,10 @@
 
 <style>
 html,body{
-width:100%;
-height:100%;
 margin:0;
 padding:0;
+width:100%;
+height:100%;
 overflow:hidden;
 background:#000
 }
@@ -43,11 +43,11 @@ font-weight:700;
 text-align:center;
 background:linear-gradient(
 270deg,
-#ff0000,
+#f00,
 #ff7f00,
-#ffff00,
-#00ff00,
-#0000ff,
+#ff0,
+#0f0,
+#00f,
 #4b0082,
 #8f00ff
 );
@@ -65,7 +65,7 @@ left:50%;
 bottom:25px;
 width:90%;
 transform:translateX(-50%);
-color:#ff3333;
+color:#f33;
 font-family:monospace;
 font-size:14px;
 text-align:center;
@@ -94,90 +94,86 @@ white-space:pre-wrap
 
 "use strict";
 
-var _0x1=["unity-canvas","loading-text","error-text"];
+var a=document.getElementById("unity-canvas"),
+b=document.getElementById("loading-text"),
+c=document.getElementById("error-text");
 
-var _0x2=document.getElementById(_0x1[0]);
-var _0x3=document.getElementById(_0x1[1]);
-var _0x4=document.getElementById(_0x1[2]);
+var d="https://nobrowebport.github.io/S3OnlinePort/",
+e="https://media.githubusercontent.com/media/nobrowebport/S3OnlinePort/main/";
 
-var _0x5="https://nobrowebport.github.io/S3OnlinePort/";
-var _0x6="https://media.githubusercontent.com/media/nobrowebport/S3OnlinePort/main/";
-
-var _0x7={
-dataUrl:_0x6+"S3WebGL.data",
-frameworkUrl:_0x5+"S3WebGL.framework.js",
-codeUrl:_0x5+"S3WebGL.wasm",
+var f={
+dataUrl:e+"S3WebGL.data",
+frameworkUrl:d+"S3WebGL.framework.js",
+codeUrl:d+"S3WebGL.wasm",
 streamingAssetsUrl:"StreamingAssets",
 companyName:"DefaultCompany",
 productName:"Slendytubbies 3",
 productVersion:"1.0"
 };
 
-var _0x8=document.createElement("script");
+var g=document.createElement("script");
 
-_0x8.src=_0x5+"S3WebGL.loader.js";
+g.src=d+"S3WebGL.loader.js";
 
-_0x8.onload=function(){
+g.onload=function(){
 
-console.log("Unity loader ready.");
+console.log("[S3] loader ready");
 
 if(typeof createUnityInstance!=="function"){
 
-_0x3.textContent="UNITY LOADER ERROR";
-_0x4.textContent="Unity initialization function unavailable.";
-return;
+b.textContent="UNITY LOADER ERROR";
+c.textContent="Unity initialization function unavailable.";
 
+return;
 }
 
-console.log("Initializing WebGL...");
-
 createUnityInstance(
-_0x2,
-_0x7,
-function(_0x9){
+a,
+f,
+function(h){
 
-var _0xa=Math.round(_0x9*100);
+var i=Math.round(h*100);
 
-_0x3.textContent="LOADING... "+_0xa+"%";
+b.textContent="LOADING... "+i+"%";
 
 }
 )
 
-.then(function(_0xb){
+.then(function(j){
 
-window.unityInstance=_0xb;
+window.unityInstance=j;
 
-_0x3.remove();
-_0x4.textContent="";
+b.remove();
 
-console.log("Game initialized.");
+c.textContent="";
+
+console.log("[S3] game ready");
 
 })
 
-.catch(function(_0xc){
+.catch(function(k){
 
-console.error("Unity initialization failed:",_0xc);
+console.error("[S3] startup failed:",k);
 
-_0x3.textContent="FAILED TO LOAD";
-_0x4.textContent=String(_0xc);
+b.textContent="FAILED TO LOAD";
+c.textContent=String(k);
 
 });
 
 };
 
-_0x8.onerror=function(){
+g.onerror=function(){
 
-console.error("Unity loader failed.");
+console.error("[S3] loader failed");
 
-_0x3.textContent="FAILED TO LOAD LOADER";
-_0x4.textContent="Unable to load the WebGL loader.";
+b.textContent="FAILED TO LOAD LOADER";
+c.textContent="Unable to load Unity loader.";
 
 };
 
-document.body.appendChild(_0x8);
+document.body.appendChild(g);
 
 })();
-
 </script>
 
 </body>
