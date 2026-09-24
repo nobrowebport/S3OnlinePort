@@ -1,100 +1,219 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
+<head>
     <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Slendytubbies 3 WebGL</title>
+
     <style>
-      body {
-        background-color: black;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-      }
-      #unity-container {
-        width: 100vw !important;
-        height: 100vh !important;
-        position: absolute;
-      }
-      canvas {
-        width: 100% !important;
-        height: 100% !important;
-      }
-      #loading-text {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-weight: bold;
-        font-size: 48px;
-        font-family: sans-serif;
-        text-align: center;
-        z-index: 10;
-        background: linear-gradient(
-          270deg,
-          #ff0000,
-          #ff7f00,
-          #ffff00,
-          #00ff00,
-          #0000ff,
-          #4b0082,
-          #8f00ff
-        );
-        background-size: 400% 400%;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: rainbow 3s ease infinite;
-      }
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+        }
 
-      @keyframes rainbow {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-      }
+        #unity-container {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+        }
+
+        #unity-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            background: #000;
+        }
+
+        #loading-text {
+            position: fixed;
+            z-index: 9999;
+
+            top: 50%;
+            left: 50%;
+
+            transform: translate(-50%, -50%);
+
+            font-family: Arial, sans-serif;
+            font-size: 42px;
+            font-weight: bold;
+
+            color: white;
+
+            text-align: center;
+            pointer-events: none;
+        }
+
+        #error-text {
+            position: fixed;
+            z-index: 10000;
+
+            left: 50%;
+            bottom: 30px;
+
+            transform: translateX(-50%);
+
+            max-width: 90%;
+
+            font-family: monospace;
+            font-size: 14px;
+
+            color: #ff4444;
+            text-align: center;
+
+            white-space: pre-wrap;
+        }
     </style>
-  </head>
-  <body>
-    <div id="loading-text">LOADING... 0%</div>
-    <div id="unity-container">
-      <canvas id="unity-canvas" tabindex="-1"></canvas>
-    </div>
+</head>
 
-    <script>
-      if (screen.orientation && screen.orientation.lock) {
-        screen.orientation.lock = screen.orientation.lock || function() { return Promise.resolve(); };
-      }
+<body>
 
-      var canvas = document.querySelector("#unity-canvas");
-      var loadingText = document.querySelector("#loading-text");
-      var GITHUB_PAGES_BASE = "https://nobrowebport.github.io/S3OnlinePort/";
+<div id="unity-container">
+    <canvas id="unity-canvas" tabindex="-1"></canvas>
+</div>
 
-      var script = document.createElement("script");
-      script.src = GITHUB_PAGES_BASE + "S3WebGL.loader.js";
-      script.onload = () => {
-        var config = {
-          dataUrl: "https://media.githubusercontent.com/media/nobrowebport/S3OnlinePort/main/S3WebGL.data",
-          frameworkUrl: GITHUB_PAGES_BASE + "S3WebGL.framework.js",
-          codeUrl: GITHUB_PAGES_BASE + "S3WebGL.wasm",
-          streamingAssetsUrl: "StreamingAssets",
-          companyName: "DefaultCompany",
-          productName: "S3WebGL",
-          productVersion: "1.0",
-        };
+<div id="loading-text">
+    LOADING... 0%
+</div>
 
-        createUnityInstance(canvas, config, function(progress) {
-          var percentage = Math.round(progress * 100);
-          loadingText.textContent = "LOADING... " + percentage + "%";
-        }).then(function(unityInstance) {
-          loadingText.remove();
-        }).catch(function(message) {
-          console.error(message);
-          loadingText.textContent = "FAILED TO LOAD";
-        });
-      };
-      script.onerror = () => {
-        loadingText.textContent = "FAILED TO LOAD LOADER SCRIPT";
-      };
-      document.body.appendChild(script);
-    </script>
-  </body>
+<div id="error-text"></div>
+
+<script>
+
+const canvas = document.getElementById("unity-canvas");
+const loadingText = document.getElementById("loading-text");
+const errorText = document.getElementById("error-text");
+
+const BASE =
+    "https://media.githubusercontent.com/media/nobrowebport/S3OnlinePort/main/";
+
+
+const config = {
+
+    dataUrl:
+        BASE + "S3WebGL.data",
+
+    frameworkUrl:
+        BASE + "S3WebGL.framework.js",
+
+    codeUrl:
+        BASE + "S3WebGL.wasm",
+
+    streamingAssetsUrl:
+        "StreamingAssets",
+
+    companyName:
+        "DefaultCompany",
+
+    productName:
+        "Slendytubbies 3",
+
+    productVersion:
+        "1.0"
+
+};
+
+const loader = document.createElement("script");
+
+loader.src =
+    "https://nobrowebport.github.io/S3OnlinePort/S3WebGL.loader.js";
+
+
+loader.onload = function () {
+
+    console.log("Unity loader loaded.");
+
+    if (typeof createUnityInstance !== "function") {
+
+        loadingText.textContent =
+            "UNITY LOADER ERROR";
+
+        errorText.textContent =
+            "createUnityInstance() was not found.";
+
+        return;
+    }
+
+
+    console.log("Starting Unity...");
+
+
+    createUnityInstance(
+        canvas,
+        config,
+
+        function (progress) {
+
+            const percent =
+                Math.round(progress * 100);
+
+            loadingText.textContent =
+                "LOADING... " + percent + "%";
+
+            console.log(
+                "Unity loading:",
+                percent + "%"
+            );
+        }
+
+    )
+
+    .then(function (unityInstance) {
+
+        console.log(
+            "UNITY LOADED SUCCESSFULLY"
+        );
+
+        loadingText.remove();
+        errorText.textContent = "";
+
+        window.unityInstance =
+            unityInstance;
+
+    })
+
+    .catch(function (error) {
+
+        console.error(
+            "UNITY FAILED:",
+            error
+        );
+
+        loadingText.textContent =
+            "FAILED TO LOAD";
+
+        errorText.textContent =
+            String(error);
+
+    });
+
+};
+
+
+loader.onerror = function () {
+
+    console.error(
+        "Could not load S3WebGL.loader.js"
+    );
+
+    loadingText.textContent =
+        "FAILED TO LOAD LOADER";
+
+    errorText.textContent =
+        "Could not load the Unity loader.";
+
+};
+
+
+document.body.appendChild(loader);
+
+</script>
+
+</body>
 </html>
